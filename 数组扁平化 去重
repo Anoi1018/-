@@ -1,5 +1,33 @@
-目标：
-1.flat的使用
-2.手写实现扁平化
-3.手写实现去重
-4.函数的组合使用
+面试题：
+
+已知如下数组：var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
+
+编写一个程序将数组扁平化并去除其中重复部分数据，最终得到一个升序且不重复的数组
+
+一、函数的组合使用
+var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
+
+//扁平化
+var flattenDeep = array => array.flat(Infinity);
+//去重
+var unique = array => Array.from(new Set(array));
+//排序
+var sort = array => array.sort((a,b)=> a-b);
+//函数组合
+var compose = (...fns) => initValue => fns.reduceRight((y,fn)=>fn(y),initValue);
+//组合后函数
+var flatten_unique_sort = compose(sort,unique,flattenDeep);
+//测试
+console.log(flatten_unique_sort(arr));
+
+二、flat的使用
+MDN：flat() 方法会按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回
+
+Array.prototype.flat() 特性总结：
+1.Array.prototype.flat() 用于将嵌套的数组扁平化，变成一维的数组。该方法返回一个新数组，对原数据没有影响。
+2.不传参数时，默认扁平化一层，可以传入一个整数，表示想要扁平化的层数。
+3.传入 <=0 的整数将返回原数组，不扁平化
+4.Infinity 关键字作为参数时，无论多少层嵌套，都会转为一维数组
+5.如果原数组有空位，Array.prototype.flat() 会跳过空位。
+["a", "b", "c", "d",,].flat()
+// ["a", "b", "c", "d"]
