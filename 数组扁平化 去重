@@ -5,6 +5,7 @@
 编写一个程序将数组扁平化并去除其中重复部分数据，最终得到一个升序且不重复的数组
 
 一、函数的组合使用
+展示一：
 var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
 
 //扁平化
@@ -19,6 +20,28 @@ var compose = (...fns) => initValue => fns.reduceRight((y,fn)=>fn(y),initValue);
 var flatten_unique_sort = compose(sort,unique,flattenDeep);
 //测试
 console.log(flatten_unique_sort(arr));
+
+var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
+
+展示二：
+//扁平化
+var flatten = arr =>{
+    while(arr.some(Array.isArray)){ //注意这里 直接是Array.isArray 最后要返回arr
+        arr = [].concat(...arr);
+    }
+    return arr;
+}
+
+//去重
+var unique = arr => [...new Set(arr)];
+//排序  
+var sort = arr => arr.sort((a,b) => a-b);
+
+var compose = (...fns) => (initValue) =>fns.reduce((y,fn)=>fn(y),initValue);
+
+var finalFn = compose(flatten,unique,sort);
+
+console.log(finalFn(arr));
 
 二、flat的使用
 MDN：flat() 方法会按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回
